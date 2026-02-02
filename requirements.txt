@@ -1,0 +1,10 @@
+ultralytics>=8.3.0
+openslide-python
+shapely
+geojson
+numpy
+opencv-python
+matplotlib
+jupyterlab
+pandas
+scikit-learn
