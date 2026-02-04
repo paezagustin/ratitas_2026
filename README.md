@@ -33,3 +33,11 @@ dvc push
 | **Subir a la nube** | `dvc push` |
 | **Sincronizar puntero** (enviar a GitHub) | `git add data.dvc && git commit -m "Update data" && git push` |
 | **Verificar estado** | `dvc status` |
+
+
+
+# Imágenes que se descartaron para entrenamiento
+
+- 7,8,16,18,19,25,28,29,32,34,35,41,45,47,48
+
+Debido a que son 2 o más placentas y no están todas etiquetadas.

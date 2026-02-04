@@ -209,3 +209,7 @@ __marimo__/
 # data
 data/
 /data
+
+# models 
+models/
+notebooks/yolo26n.pt
