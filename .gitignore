@@ -213,3 +213,4 @@ data/
 # models 
 models/
 notebooks/yolo26n.pt
+notebooks/runs
