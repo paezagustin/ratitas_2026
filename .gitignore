@@ -214,3 +214,4 @@ data/
 models/
 notebooks/yolo26n.pt
 notebooks/runs
+notebooks/yolo11l-seg.pt
