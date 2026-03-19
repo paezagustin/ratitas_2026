@@ -1,0 +1,81 @@
+======================================================================
+ANÁLISIS COMPARATIVO DE MODELOS
+======================================================================
+
+RANKING GENERAL DE MODELOS:
+--------------------------------------------------
+8. yolo26x-256r256-ovlp50-100ep
+   mIoU: 0.8035
+   Score compuesto: 0.8491
+   Pixel Accuracy: 93.83%
+
+4. yolo26l-1280r640-ovl256
+   mIoU: 0.7909
+   Score compuesto: 0.8432
+   Pixel Accuracy: 95.69%
+
+10. yolo26x-768r512-ovlp150-100ep
+   mIoU: 0.7781
+   Score compuesto: 0.8289
+   Pixel Accuracy: 81.46%
+
+3. yolo26l-1280r640-1
+   mIoU: 0.7700
+   Score compuesto: 0.8250
+   Pixel Accuracy: 96.90%
+
+9. yolo26x-512r256-ovlp150-100ep
+   mIoU: 0.7718
+   Score compuesto: 0.8240
+   Pixel Accuracy: 73.93%
+
+2. yolo26l-1024r512-100epochs-0902-resized512_1
+   mIoU: 0.7554
+   Score compuesto: 0.8133
+   Pixel Accuracy: 85.54%
+
+7. yolo26x-256r128-ovlp50-100ep
+   mIoU: 0.7665
+   Score compuesto: 0.8116
+   Pixel Accuracy: 87.17%
+
+1. yolo11x-1280r896-ovl256-w_bgs
+   mIoU: 0.7441
+   Score compuesto: 0.8102
+   Pixel Accuracy: 76.67%
+
+6. yolo26x-2048r1024-ovlp512-100ep
+   mIoU: 0.7369
+   Score compuesto: 0.7884
+   Pixel Accuracy: 97.15%
+
+5. yolo26l-1280r896-ovl256-w_bgs
+   mIoU: 0.0000
+   Score compuesto: 0.0000
+   Pixel Accuracy: 0.00%
+
+
+MEJOR MODELO: yolo26x-256r256-ovlp50-100ep
+======================================================================
+
+Rendimiento por clase:
+
+  Decidua:
+    IoU: 0.7398 ± 0.1020
+    Dice: 0.8108
+    Tiles evaluados: 1113
+
+  Junctional Zone:
+    IoU: 0.7709 ± 0.0701
+    Dice: 0.8434
+    Tiles evaluados: 1298
+
+  Labyrinth:
+    IoU: 0.8999 ± 0.0097
+    Dice: 0.9363
+    Tiles evaluados: 2412
+
+
+COMPARACIÓN: yolo26x-256r256-ovlp50-100ep vs yolo26l-1280r640-ovl256
+--------------------------------------------------
+Mejora en mIoU: 1.60%

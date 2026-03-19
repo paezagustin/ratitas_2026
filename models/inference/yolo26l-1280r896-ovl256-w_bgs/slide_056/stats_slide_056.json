@@ -1,0 +1,142 @@
+{
+  "image": "slide_056",
+  "dimensions": [
+    14487,
+    8692
+  ],
+  "per_class": {
+    "0": {
+      "class_name": "Decidua",
+      "n_tiles_evaluable": 68,
+      "n_tiles_with_pred": 0,
+      "n_tiles_without_pred": 68,
+      "coverage_mean": 0.38769936076030453,
+      "coverage_std": 0.2415863193652461,
+      "iou": {
+        "mean": 0.0,
+        "std": 0.0,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "q25": 0.0,
+        "q75": 0.0
+      },
+      "dice": {
+        "mean": 0.0,
+        "std": 0.0,
+        "median": 0.0
+      },
+      "precision": {
+        "mean": 0.0,
+        "std": 0.0,
+        "median": 0.0
+      },
+      "recall": {
+        "mean": 0.0,
+        "std": 0.0,
+        "median": 0.0
+      }
+    },
+    "2": {
+      "class_name": "Junctional Zone",
+      "n_tiles_evaluable": 62,
+      "n_tiles_with_pred": 0,
+      "n_tiles_without_pred": 62,
+      "coverage_mean": 0.4523556703525278,
+      "coverage_std": 0.26617147087750537,
+      "iou": {
+        "mean": 0.0,
+        "std": 0.0,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "q25": 0.0,
+        "q75": 0.0
+      },
+      "dice": {
+        "mean": 0.0,
+        "std": 0.0,
+        "median": 0.0
+      },
+      "precision": {
+        "mean": 0.0,
+        "std": 0.0,
+        "median": 0.0
+      },
+      "recall": {
+        "mean": 0.0,
+        "std": 0.0,
+        "median": 0.0
+      }
+    },
+    "1": {
+      "class_name": "Labyrinth",
+      "n_tiles_evaluable": 89,
+      "n_tiles_with_pred": 0,
+      "n_tiles_without_pred": 89,
+      "coverage_mean": 0.6890810338822275,
+      "coverage_std": 0.33536168891855944,
+      "iou": {
+        "mean": 0.0,
+        "std": 0.0,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "q25": 0.0,
+        "q75": 0.0
+      },
+      "dice": {
+        "mean": 0.0,
+        "std": 0.0,
+        "median": 0.0
+      },
+      "precision": {
+        "mean": 0.0,
+        "std": 0.0,
+        "median": 0.0
+      },
+      "recall": {
+        "mean": 0.0,
+        "std": 0.0,
+        "median": 0.0
+      }
+    }
+  },
+  "confusion_matrix": {
+    "matrix_norm": [
+      [
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0
+      ]
+    ],
+    "matrix_raw": [
+      [
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0
+      ]
+    ],
+    "pixel_accuracy": 0.0
+  }
+}

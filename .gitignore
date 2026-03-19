@@ -211,6 +211,5 @@ data/
 /data
 
 # models 
-models/
 notebooks/runs
 notebooks/*.pt
