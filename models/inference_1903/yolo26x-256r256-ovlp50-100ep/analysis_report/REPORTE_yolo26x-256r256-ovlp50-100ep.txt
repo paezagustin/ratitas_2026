@@ -1,0 +1,65 @@
+================================================================================
+ANÁLISIS COMPLETO DEL MODELO: yolo26x-256r256-ovlp50-100ep
+================================================================================
+
+RESUMEN EJECUTIVO
+----------------------------------------
+Total de imágenes analizadas: 5
+Total de tiles evaluados: 4,823
+mIoU Global: 0.8035 ± 0.0977
+Pixel Accuracy Global: 0.00%
+Rango de IoU: [0.621, 0.916]
+
+RENDIMIENTO POR CLASE
+----------------------------------------
+
+Decidua:
+  IoU: 0.7398 ± 0.1020
+  Dice/F1: 0.8108
+  Precision: 0.8452 | Recall: 0.8379
+  Cobertura GT: 58.5%
+  Tasa de predicción: 94.7%
+
+Junctional Zone:
+  IoU: 0.7709 ± 0.0701
+  Dice/F1: 0.8434
+  Precision: 0.8406 | Recall: 0.9122
+  Cobertura GT: 58.6%
+  Tasa de predicción: 99.5%
+
+Labyrinth:
+  IoU: 0.8999 ± 0.0097
+  Dice/F1: 0.9363
+  Precision: 0.9177 | Recall: 0.9782
+  Cobertura GT: 81.4%
+  Tasa de predicción: 100.0%
+
+
+TOP 5 IMÁGENES (mejor mIoU)
+----------------------------------------
+slide_023: 0.8483
+slide_021: 0.8301
+slide_010: 0.8176
+slide_002: 0.7802
+slide_056: 0.7415
+
+
+BOTTOM 5 IMÁGENES (peor mIoU)
+----------------------------------------
+slide_056: 0.7415
+slide_002: 0.7802
+slide_010: 0.8176
+slide_021: 0.8301
+slide_023: 0.8483
+
+
+OUTLIERS DETECTADOS: 1
+----------------------------------------
+slide_002 - Labyrinth: IoU=0.916 (Alto)
+
+
+CONCLUSIÓN
+----------------------------------------
+Mejor clase: Labyrinth
+Clase con más dificultades: Decidua
+El modelo muestra un rendimiento EXCELENTE (mIoU > 0.7)

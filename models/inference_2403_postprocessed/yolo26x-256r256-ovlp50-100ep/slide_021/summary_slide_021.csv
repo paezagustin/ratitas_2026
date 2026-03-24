@@ -1,0 +1,4 @@
+Clase,Tiles Evaluables,Con Predicción (%),Sin Predicción (%),IoU (media),IoU (std),IoU (mediana),"IoU [min, max]",Dice (media±std),Recall,Precision,Cobertura GT (%)
+Decidua,160,100.0,0.0,0.7648,0.2042,0.8077,"[0.082, 1.000]",0.849±0.159,0.953,0.797,49.1±28.2
+Labyrinth,397,100.0,0.0,0.8872,0.1859,0.9950,"[0.166, 1.000]",0.927±0.135,0.988,0.898,78.5±30.8
+Junctional Zone,246,100.0,0.0,0.8235,0.2075,0.8956,"[0.041, 1.000]",0.884±0.168,0.960,0.857,62.8±31.9
