@@ -213,3 +213,4 @@ data/
 # models 
 notebooks/runs
 notebooks/*.pt
+scripts/training_classifier/*.pt
