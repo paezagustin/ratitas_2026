@@ -1,0 +1,275 @@
+%!TeX encoding = UTF-8
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,english]{babel}
+\usepackage{graphicx}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{longtable}
+
+\title{Segmentación Semántica de Imágenes Histológicas de Placenta de Ratón Usando YOLO}
+\author{Agustín Páez\\Director: [NOMBRE DEL DIRECTOR]\\Universidad Nacional de San Juan}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Este trabajo presenta un sistema de segmentación semántica para imágenes histológicas de placenta de ratón (Whole Slide Images - WSI) utilizando YOLO. El dataset fue preparado manualmente a partir de 50 WSIs anotadas en QuPath, representando tres clases principales: Decidua, Labyrinth y Junctional Zone. Se experimentó con múltiples configuraciones de tamaño de parche (256, 512, 768, 1280, 2048 píxeles) y diferentes niveles de solapamiento (50\%, 150, 256). El mejor modelo (YOLOv11x-seg) alcanzó un mIoU global de 0.78 y Dice de 0.83 en validación.
+\end{abstract}
+
+\section{Introducción}
+
+La placenta es un órgano crítico en el desarrollo embrionario de los mamíferos. En modelos ratón, presenta tres regiones principales:
+\begin{itemize}
+    \item \textbf{Decidua}: Capa exterior que contacta con el útero materno
+    \item \textbf{Labyrinth}: Región central de intercambio sanguíneo
+    \item \textbf{Junctional Zone}: Zona de transición entre decidua y labyrinth
+\end{itemize}
+
+El análisis automático de estas estructuras es relevante para estudios de biología del desarrollo, toxicología reproductiva e investigación de trastornos del embarazo. Sin embargo, la segmentación manual de WSIs es un proceso extremadamente consumidor de tiempo y propenso a errores.
+
+\section{Trabajo Relacionado}
+
+\subsection{Métodos Clásicos}
+\begin{itemize}
+    \item Thresholding y clustering
+    \item Region growing y watershed
+    \item Active contours, level sets
+\end{itemize}
+
+\subsection{Aprendizaje Profundo para Segmentación}
+\begin{itemize}
+    \item U-Net: estándar en segmentación médica
+    \item DeepLab, SegNet
+    \item Transformers: ViT, Swin-UNETR
+    \item YOLOv8/YOLOv11-Seg: segmentación en tiempo real
+\end{itemize}
+
+\subsection{Datasets Relacionados}
+\begin{itemize}
+    \item FeTA: 90 imágenes MRI fetal con 7 clases
+    \item PlaNet-S: 42 imágenes histológicas de placenta
+    \item Mouse embryo: 200 imágenes de embrión ratón
+    \item Intestinal organoids: 840 imágenes de organoides ratón
+\end{itemize}
+
+\section{Metodología}
+
+\subsection{Dataset}
+
+Se utilizaron 50 Whole Slide Images (WSIs) de placenta de ratón en formato TIF, con dimensiones típicas de ~8000×6000 píxeles.
+
+\begin{table}[ht]
+\centering
+\caption{Distribución de WSIs utilizadas}
+\label{tab:wsi-dist}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Conjunto & WSIs & Parches generados \\ \midrule
+Entrenamiento & 35 & 26,038 \\
+Validación & 15 & 11,340 \\ \midrule
+\textbf{Total} & \textbf{50} & \textbf{37,378} \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Clases de Anotación}
+
+\begin{table}[ht]
+\centering
+\caption{Clases del dataset}
+\label{tab:classes}
+\begin{tabular}{@{}ccc@{}}
+\toprule
+ID & Clase & Descripción \\ \midrule
+0 & Decidua & Capa exterior de la placenta \\
+1 & Labyrinth & Región central de intercambio \\
+2 & Junctional Zone & Zona de transición \\
+3 & no\_labeled & Áreas no anotadas (ignoradas) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Preprocesamiento y Generación de Parches}
+
+Se generaron múltiples datasets con diferentes configuraciones:
+
+\begin{longtable}{|l|c|c|c|}
+\hline
+\textbf{Dataset} & \textbf{Tamaño parche} & \textbf{Solapamiento} & \textbf{Clases} \\ \hline
+\endfirsthead
+\hline
+\textbf{Dataset} & \textbf{Tamaño parche} & \textbf{Solapamiento} & \textbf{Clases} \\ \hline
+\endhead
+\hline
+\endfoot
+\hline
+\endlastfoot
+YOLO-256x256-50ovlp & 256 & 50\% & 3 \\
+YOLO-256x256-50ovlp\_V2 & 256 & 50\% & 5 (con background) \\
+YOLO-256x256-50ovlp\_V3 & 256 & 50\% & 5 \\
+YOLO-256x256-50ovlp\_V4 & 256 & 50\% & 4 (sin no\_labeled) \\
+YOLO-512x512-150ovlp & 512 & 150px & 3 \\
+YOLO-768x768-150ovlp & 768 & 150px & 3 \\
+YOLO-1280x1280-256ovlp & 1280 & 256px & 3 \\
+YOLO-1280x1280-256ovlp\_w\_bgs & 1280 & 256px & 3 \\
+YOLO-2048x2048-512ovlp & 2048 & 512px & 3 \\
+\end{longtable}
+
+\subsection{Modelos Entrenados}
+
+Se experimentó con múltiples variantes de YOLO:
+
+\begin{longtable}{|l|c|c|c|}
+\hline
+\textbf{Modelo} & \textbf{Parámetros} & \textbf{GFLOPs} & \textbf{Dataset} \\ \hline
+\endfirsthead
+\hline
+\textbf{Modelo} & \textbf{Parámetros} & \textbf{GFLOPs} & \textbf{Dataset} \\ \hline
+\endhead
+\hline
+\endfoot
+\hline
+\endlastfoot
+YOLOv8x-seg & 70.5M & 336.7 & YOLO-256x256-50ovlp\_V4 \\
+YOLOv8l-seg & 43.7M & 165.4 & YOLO-1280x1280-256ovlp \\
+YOLOv8l-seg & 43.7M & 165.4 & YOLO-1280x1280-256ovlp\_w\_bgs \\
+YOLOv11x-seg & 62.0M & 295.9 & YOLO-1280x1280-256ovlp\_w\_bgs \\
+YOLOv8x-seg & 70.5M & 336.7 & YOLO-512x512-150ovlp \\
+YOLOv8x-seg & 70.5M & 336.7 & YOLO-768x768-150ovlp \\
+YOLOv8x-seg & 70.5M & 336.7 & YOLO-2048x2048-512ovlp \\
+\end{longtable}
+
+\subsection{Configuración de Entrenamiento}
+
+\begin{itemize}
+    \item Modelo base: YOLOv8x-seg.pt / YOLOv11x-seg.pt
+    \item Epochs: 100
+    \item Optimizer: AdamW
+    \item Learning rate: 0.001
+    \item Weight decay: 0.0005
+    \item Momentum: 0.937
+    \item Batch size: 128
+    \item Patience: 15
+    \item Augmentations: Mosaic 1.0, flip horizontal 0.5, rotación ±10°
+\end{itemize}
+
+\section{Resultados}
+
+\subsection{Métricas de Evaluación (Modelo YOLOv11x-seg - Mejor resultado)}
+
+\begin{table}[ht]
+\centering
+\caption{Resultados globales - YOLOv11x-seg}
+\label{tab:results-global}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Métrica & Valor & std \\ \midrule
+mIoU & 0.780 & 0.277 \\
+Dice & 0.835 & 0.272 \\
+Precision & 0.833 & 0.289 \\
+Recall & 0.866 & 0.261 \\
+Pixel Accuracy & 0.906 & 0.150 \\
+F1 & 0.835 & 0.272 \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Resultados por clase - YOLOv11x-seg}
+\label{tab:results-per-class}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Clase & Box mAP50 & Seg mAP50 & Seg mAP & AP \\ \midrule
+Decidua & 0.694 & 0.618 & 0.352 & 0.518 \\
+Labyrinth & 0.846 & 0.846 & 0.698 & 0.733 \\
+Junctional Zone & 0.646 & 0.635 & 0.393 & 0.476 \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Ultralytics Metrics}
+
+\begin{table}[ht]
+\centering
+\caption{Métricas de Ultralytics}
+\label{tab:ultralytics-metrics}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Métrica & Global & Decidua & Labyrinth & JZ \\ \midrule
+Box mAP50 & 0.729 & - & - & - \\
+Box mAP & 0.576 & - & - & - \\
+Seg mAP50 & 0.700 & 0.618 & 0.846 & 0.635 \\
+Seg mAP & 0.481 & 0.352 & 0.698 & 0.393 \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\section{Análisis de Resultados}
+
+\subsection{Por clase}
+\begin{itemize}
+    \item \textbf{Labyrinth}: Mejor rendimiento (mAP50 = 0.846) - textura más distintiva
+    \item \textbf{Decidua}: Rendimiento medio (mAP50 = 0.618) - mayor variabilidad
+    \item \textbf{Junctional Zone}: Menor rendimiento (mAP50 = 0.635) - zona de transición ambiguo
+\end{itemize}
+
+\subsection{Por tamaño de imagen}
+\begin{itemize}
+    \item Imágenes mayores (1280+) capturan mejor las estructuras grandes
+    \item Imágenes menores (256) son más rápidas pero pierden detalle
+\end{itemize}
+
+\section{Conclusiones}
+
+\begin{itemize}
+    \item YOLO es efectivo para segmentación de placenta de ratón
+    \item Labyrinth es la clase con mejor detección debido a su textura distintiva
+    \item Junctional Zone es la clase más difícil por ser una zona de transición
+    \item El solapamiento de parches mejora la continuidad de las máscaras
+\end{itemize}
+
+\textbf{Palabras clave}: Segmentación semántica, placenta de ratón, YOLO, imágenes histológicas, Whole Slide Images, deep learning
+
+\section{Referencias}
+
+\begin{thebibliography}{99}
+
+\bibitem{yolo-fetal-2026}
+YOLOv8-Seg for Multi-Tissue Segmentation of Fetal Brain MRI: A FeTA Benchmark and Comparative Study with U-Net Variants.
+\textit{Journal of Imaging Informatics in Medicine}, 2026.
+
+bibitem{planets}
+S. Yamamoto, S. Saito.
+PlaNet-S: Automatic Semantic Segmentation of Placenta.
+\textit{arXiv:2312.11580}, 2023.
+
+bibitem{embryo}
+S.M. Rolfe, A.M. Maga.
+Deep Learning Enabled Multi-Organ Segmentation of Mouse Embryos.
+\textit{bioRxiv}, 2022.
+
+bibitem{organoids}
+T. Mäkelä, E. Domenech-Moreno.
+Annotated mouse intestinal organoid dataset (YOLO format).
+\textit{Zenodo}, 2023.
+
+bibitem{qupath}
+Bankhead, P., et al.
+QuPath: Open source software for digital pathology.
+\textit{Scientific Reports}, 2017.
+
+bibitem{yolo-ultralytics}
+Glenn Jocher.
+Ultralytics YOLOv8/YOLOv11.
+\textit{GitHub}, 2023-2024.
+
+bibitem{unet}
+Ronneberger, O., et al.
+U-Net: Convolutional Networks for Biomedical Image Segmentation.
+\textit{MICCAI}, 2015.
+
+\end{thebibliography}
+
+\end{document}

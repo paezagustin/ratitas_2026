@@ -1,0 +1,33 @@
+\section{Materiales y Métodos}
+
+\subsection{Dataset y Obtención de Imágenes}
+
+El dataset está compuesto por 50 Whole Slide Images (WSI) de placentalas de rata, almacenadas en formato TIFF con una resolución promedio de $6500 \times 9000$ píxeles. Las imágenes histológicas fueron escaneadas a 20x de magnificación y procesadas para análisis de segmentación semántica. Para cada imagen se contó con anotaciones manuales en formato GeoJSON que delimitan tres clases de tejido: \textit{Decidua}, \textit{Labyrinth} y \textit{Junctional Zone}, además de áreas sin marcar que fueron clasificadas automáticamente como \textit{no\_labeled} o \textit{background}.
+
+\subsection{Preprocesamiento de Anotaciones}
+
+\textbf{Limpieza de Anotaciones de Tejido:} Las anotaciones originales fueron procesadas para remover áreas de fondo incorrectamente anotadas como tejido. Se utilizó detección de color de fondo en el espacio de color HSV, definiendo como fondo píxeles con saturación $<$ 30 y valor $>$ 200. Para cada clase de tejido, se generó una máscara binaria y se removieron las regiones que intersecaban con la máscara de fondo. Adicionalmente, se aplicó el método de \textit{Connected Component Detection} para filtrar componentes con área $<$ 500 píxeles. Las anotaciones finales contienen 4 clases: \textit{Decidua}, \textit{Labyrinth}, \textit{Junctional Zone} y \textit{no\_labeled}.
+
+\textbf{Detección de Tejido no Anotado y Fondo:} Las áreas de tejido presente en la imagen pero no contenidas en las anotaciones manuales fueron detectadas mediante diferencia entre la máscara de tejido (obtenida por thresholding HSV) y la máscara de anotaciones. Las regiones mayores a 5000 píxeles fueron catalogadas como \textit{no\_labeled}. Análogamente, las áreas de fondo (HSV) no contenidas en las anotaciones fueron clasificadas como \textit{background}.
+
+\subsection{Extracción de Parches}
+
+Se implementó un pipeline de \textit{stratified tiling} para extraer parches de las WSI. Para cada slide, se generó un grid de parches de tamaño $1280 \times 1280$ píxeles con un traslape del 35\% entre parches adyacentes. Dentro de cada región poligonal de las anotaciones, se verificaron dos criterios de validez: (1) intersección real entre el parche y el polígono, y (2) que el parche no sea predominantemente fondo (definido como $<$ 95\% de píxeles con valor $>$ 240 o $<$ 15).
+
+Cada parche válido fue acompañado de las coordenadas del polígono original recortado a los límites del parche, almacenado en formato YOLO-Seg donde los vértices del polígono se normalizan al tamaño del parche ($1280 \times 1280$).
+
+\subsection{Estrategias de Muestreo}
+
+Dada la distribución desbalanceada de las clases en el dataset, se evaluaron tres estrategias de muestreo:
+
+\textbf{Uniform Sampling:} Se seleccionó igual número de parches por clase, limitado por la clase con menor cantidad disponible.
+
+\textbf{Inverse Frequency Sampling:} Se distribuyó el número total de parches inversamente proporcional al área total de cada clase en el dataset, favoreciendo clases con menor representación espacial.
+
+\textbf{Hard Negative Mining:} Para la clase mayoritaria (\textit{Labyrinth}), se seleccionaron únicamente los parches más ``difíciles'' (aquellos con mayor score de dificultad = varianza $\times$ gradiente), mientras todas las clases minoritarias retienen todos sus parches disponibles.
+
+Se utilizó un split train/val del 80\%/20\% a nivel de slide para evitar data leakage. El dataset final contiene 4012 parches (3209 train, 803 validation) para la estrategia de \textit{hard negative mining}.
+
+\subsection{Parámetros de Implementación}
+
+Las librerías principales utilizadas fueron: OpenCV para procesamiento de imagen, GeoJSON/Shapely para manejo de anotaciones, Rasterio para lectura de WSI, Scikit-learn para split de datos, y NumPy/Pandas para manipulación de datos. El código fue implementado en Jupyter Notebooks y está disponible en el repositorio del proyecto.
